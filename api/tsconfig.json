@@ -25,6 +25,7 @@
 
     "paths": {
       "@/*": ["./src/*"],
+      "@errors/*": ["./src/application/errors/*"],
       "@gateways/*": ["./src/application/gateways/*"],
       "@use-cases/*": ["./src/application/use-cases/*"],
       "@factories/*": ["./src/infra/http/factories/*"],

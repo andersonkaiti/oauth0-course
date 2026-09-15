@@ -25,6 +25,7 @@
 
     "paths": {
       "@/*": ["./src/*"],
+      "@routes/*": ["./src/infra/http/routes/*"],
       "@shared/*": ["./src/shared/*"]
     }
   }

@@ -1,4 +1,5 @@
 import { AuthGuard } from '@guards/auth-guard'
+import { GoogleCallback } from '@pages/google-callback'
 import { lazy } from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { routes } from './routes'
@@ -21,6 +22,7 @@ export function Router() {
       <Routes>
         <Route element={<AuthGuard />}>
           <Route path={routes.signIn} element={<SignIn />} />
+          <Route path={routes.googleCallback} element={<GoogleCallback />} />
         </Route>
         <Route element={<AuthGuard isPrivate />}>
           <Route path={routes.home} element={<Home />} />

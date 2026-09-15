@@ -1,0 +1,5 @@
+packages:
+  - "api"
+  - "frontend"
+allowBuilds:
+  esbuild: true

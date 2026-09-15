@@ -25,6 +25,9 @@
 
     "paths": {
       "@/*": ["./src/*"],
+      "@gateways/*": ["./src/application/gateways/*"],
+      "@use-cases/*": ["./src/application/use-cases/*"],
+      "@factories/*": ["./src/infra/http/factories/*"],
       "@routes/*": ["./src/infra/http/routes/*"],
       "@shared/*": ["./src/shared/*"]
     }

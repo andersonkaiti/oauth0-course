@@ -6,7 +6,7 @@ export function makeGoogleAuth() {
   const googleAuthGateway = new GoogleAuthGateway(
     env.GOOGLE_CLIENT_ID,
     env.GOOGLE_CLIENT_SECRET,
-    env.GOOGLE_CALLBACK_URL,
+    env.GOOGLE_CLIENT_URL,
   )
 
   return new AuthGoogleUseCase(googleAuthGateway)

@@ -1,0 +1,10 @@
+services:
+  database:
+    image: postgres:17-alpine
+    container_name: oauth2-course
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: oauth2-course
+    ports:
+      - "5432:5432"

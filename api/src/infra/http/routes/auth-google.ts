@@ -11,15 +11,26 @@ export function authGoogleRoute(app: FastifyInstance) {
       body: z.object({
         code: z.string().min(1),
       }),
+      response: {
+        200: z.object({
+          accessToken: z.string(),
+        }),
+      },
     },
     handler: async (request, reply) => {
       const { code } = request.body
 
       const authGoogleUseCase = makeGoogleAuth()
 
-      await authGoogleUseCase.execute({ code })
+      const user = await authGoogleUseCase.execute({ code })
 
-      reply.status(200).send()
+      const accessToken = await reply.jwtSign({
+        sub: user.id,
+      })
+
+      reply.status(200).send({
+        accessToken,
+      })
     },
   })
 }

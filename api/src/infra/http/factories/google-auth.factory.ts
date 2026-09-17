@@ -1,3 +1,4 @@
+import { UsersRepository } from '@database/repositories/user.repository.ts'
 import { env } from '@shared/env.ts'
 import { AuthGoogleUseCase } from '@use-cases/auth-google.usecase.ts'
 import { GoogleAuthGateway } from '../gateways/google-auth.gateway.ts'
@@ -9,5 +10,7 @@ export function makeGoogleAuth() {
     env.GOOGLE_CLIENT_URL,
   )
 
-  return new AuthGoogleUseCase(googleAuthGateway)
+  const usersRepository = new UsersRepository()
+
+  return new AuthGoogleUseCase(googleAuthGateway, usersRepository)
 }

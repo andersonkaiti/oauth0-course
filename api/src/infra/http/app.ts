@@ -1,7 +1,9 @@
 import cors from '@fastify/cors'
+import fastifyJwt from '@fastify/jwt'
 import fastifySwagger from '@fastify/swagger'
 import { authGoogleRoute } from '@routes/auth-google.ts'
 import fastifyApiReference from '@scalar/fastify-api-reference'
+import { env } from '@shared/env.ts'
 import Fastify from 'fastify'
 import {
   jsonSchemaTransform,
@@ -10,7 +12,9 @@ import {
 } from 'fastify-type-provider-zod'
 
 export const app = Fastify({
-  logger: true,
+  logger: {
+    level: 'error',
+  },
 })
 
 app.setSerializerCompiler(serializerCompiler)
@@ -30,6 +34,13 @@ app.register(fastifyApiReference, {
   routePrefix: '/docs',
   configuration: {
     theme: 'kepler',
+  },
+})
+
+app.register(fastifyJwt, {
+  secret: env.JWT_SECRET,
+  sign: {
+    expiresIn: '1d',
   },
 })
 

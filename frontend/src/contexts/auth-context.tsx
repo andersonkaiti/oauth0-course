@@ -1,17 +1,29 @@
 import { toast } from '@components/ui/toast'
 import { env } from '@config/env'
-import { createContext, type PropsWithChildren, useState } from 'react'
+import { httpClient } from '@http/http-client'
+import { isAxiosError } from 'axios'
+import {
+  createContext,
+  type PropsWithChildren,
+  useEffect,
+  useState,
+} from 'react'
 
 interface IAuthContext {
   signedIn: boolean
   signInWithGoogle: () => void
   signOut: () => void
+  signIn: (accessToken: string) => void
 }
 
 export const AuthContext = createContext({} as IAuthContext)
 
+const ACCESS_TOKEN_KEY = '@oauth2-access-token'
+
 export function AuthProvider({ children }: PropsWithChildren) {
-  const [signedIn, setSignedIn] = useState(false)
+  const [signedIn, setSignedIn] = useState(
+    () => !!localStorage.getItem(ACCESS_TOKEN_KEY),
+  )
 
   function signInWithGoogle() {
     const url = new URL('https://accounts.google.com/o/oauth2/v2/auth')
@@ -28,7 +40,20 @@ export function AuthProvider({ children }: PropsWithChildren) {
     window.location.href = url.toString()
   }
 
+  function signIn(accessToken: string) {
+    localStorage.setItem(ACCESS_TOKEN_KEY, accessToken)
+
+    setSignedIn(true)
+
+    toast.add({
+      title: 'Autenticação bem-sucedida!',
+      type: 'success',
+    })
+  }
+
   function signOut() {
+    localStorage.removeItem(ACCESS_TOKEN_KEY)
+
     setSignedIn(false)
 
     toast.add({
@@ -37,12 +62,41 @@ export function AuthProvider({ children }: PropsWithChildren) {
     })
   }
 
+  useEffect(() => {
+    const interceptorRequestId = httpClient.interceptors.request.use(
+      (config) => {
+        const accessToken = localStorage.getItem(ACCESS_TOKEN_KEY)
+
+        config.headers.Authorization = `Bearer ${accessToken}`
+
+        return config
+      },
+    )
+
+    const interceptorResponseId = httpClient.interceptors.response.use(
+      (value) => value,
+      (error) => {
+        if (isAxiosError(error) && error.response?.status === 401) {
+          localStorage.removeItem(ACCESS_TOKEN_KEY)
+        }
+
+        throw error
+      },
+    )
+
+    return () => {
+      httpClient.interceptors.request.eject(interceptorRequestId)
+      httpClient.interceptors.request.eject(interceptorResponseId)
+    }
+  }, [])
+
   return (
     <AuthContext
       value={{
         signedIn,
         signInWithGoogle,
         signOut,
+        signIn,
       }}
     >
       {children}

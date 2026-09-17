@@ -14,6 +14,7 @@ interface IAuthContext {
   signInWithGoogle: () => void
   signOut: () => void
   signIn: (accessToken: string) => void
+  isLoading: boolean
 }
 
 export const AuthContext = createContext({} as IAuthContext)
@@ -24,8 +25,11 @@ export function AuthProvider({ children }: PropsWithChildren) {
   const [signedIn, setSignedIn] = useState(
     () => !!localStorage.getItem(ACCESS_TOKEN_KEY),
   )
+  const [isLoading, setIsLoading] = useState(false)
 
   function signInWithGoogle() {
+    setIsLoading(true)
+
     const url = new URL('https://accounts.google.com/o/oauth2/v2/auth')
 
     // Identifica nossa aplicação ao Google:
@@ -97,6 +101,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
         signInWithGoogle,
         signOut,
         signIn,
+        isLoading,
       }}
     >
       {children}

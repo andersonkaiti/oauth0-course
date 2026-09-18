@@ -2,6 +2,7 @@ import cors from '@fastify/cors'
 import fastifyJwt from '@fastify/jwt'
 import fastifySwagger from '@fastify/swagger'
 import { authGoogleRoute } from '@routes/auth-google.ts'
+import { meRoute } from '@routes/me.ts'
 import fastifyApiReference from '@scalar/fastify-api-reference'
 import { env } from '@shared/env.ts'
 import Fastify from 'fastify'
@@ -50,5 +51,6 @@ app.register(cors, {
 })
 
 app.register(authGoogleRoute)
+app.register(meRoute)
 
 app.get('/', (_request, reply) => reply.send({ message: 'OAuth2 API Flow' }))

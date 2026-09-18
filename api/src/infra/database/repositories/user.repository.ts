@@ -1,5 +1,6 @@
 import type { IUser } from '@domain/entities/users.entity.ts'
 import type { IUsersRepository } from '@domain/repositories/users.repository.ts'
+import { eq } from 'drizzle-orm'
 import { db } from '../drizzle/index.ts'
 import { usersTable } from '../drizzle/schemas/user.ts'
 
@@ -31,6 +32,15 @@ export class UsersRepository implements IUsersRepository {
         },
       })
       .returning()
+
+    return user
+  }
+
+  async getUserById(id: IUser['id']): Promise<IUser> {
+    const [user] = await db
+      .select()
+      .from(usersTable)
+      .where(eq(usersTable.id, id))
 
     return user
   }

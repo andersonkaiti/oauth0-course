@@ -32,7 +32,8 @@
       "@http/*": ["./src/http/*"],
       "@lib/*": ["./src/lib/*"],
       "@pages/*": ["./src/pages/*"],
-      "@router/*": ["./src/router/*"]
+      "@router/*": ["./src/router/*"],
+      "@utils/*": ["./src/utils/*"]
     }
   },
   "include": ["src"]

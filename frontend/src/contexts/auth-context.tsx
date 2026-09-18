@@ -5,7 +5,7 @@ import { isAxiosError } from 'axios'
 import {
   createContext,
   type PropsWithChildren,
-  useEffect,
+  useLayoutEffect,
   useState,
 } from 'react'
 
@@ -66,12 +66,12 @@ export function AuthProvider({ children }: PropsWithChildren) {
     })
   }
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const interceptorRequestId = httpClient.interceptors.request.use(
       (config) => {
         const accessToken = localStorage.getItem(ACCESS_TOKEN_KEY)
 
-        config.headers.Authorization = `Bearer ${accessToken}`
+        config.headers.set('Authorization', `Bearer ${accessToken}`)
 
         return config
       },
